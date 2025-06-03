@@ -27,7 +27,89 @@ namespace SpellCheckerTask
             //Add these suggested words to a spelling list that the user can save as a file to work on
             //their own spelling
 
+            Console.WriteLine("enter a word");
+            string userWord = Console.ReadLine();
+            string[] dictionary = createDictionary();
+            int incorrectNoWords = 0;
+            
 
+            try
+            {
+                dictionary = File.ReadAllLines("WordsFile.txt").ToArray();
+            }
+            catch
+            {
+                Console.WriteLine("couldnt load");
+                return;
+            }
+         
+            Console.WriteLine("enter word");
+            string singleWord = Console.ReadLine();
+
+            if (dictionary.Contains(singleWord))
+            {
+                Console.WriteLine("correct");
+            }
+            else
+            {
+                Console.WriteLine("incorrect");
+            }
+
+
+            Console.WriteLine("enter sentence");
+            string sentence = Console.ReadLine();
+            string[] splitSentence = sentence.Split(' ');
+            string[] incorrectWords = new string[][];
+
+            foreach (string word in splitSentence)
+            {
+                if (!dictionary.Contains(word))
+                {
+                    incorrectNoWords++;
+                    incorrectWords.Add(word);
+                }
+            }
+
+            
+
+
+            if (sentence.Length > 0)
+            {
+                double score = (sentence.Length - incorrectNoWords) * 100.0 / sentence.Length;
+                Console.WriteLine($"Spelling score: {score:F1}% correct");
+            }
+
+            if (incorrectNoWords > 0)
+            {
+                File.WriteAllLines("IncorrectWords.txt");
+                File.WriteAllText("IncorrectWords.txt", incorrectWords);
+                Console.WriteLine($"Saved {incorrectNoWords} incorrect words to file.");
+            }
+            else
+            {
+                Console.WriteLine("All words spelled correctly!");
+            }
+
+        }
+    }
+
+
+    static string[] createDictionary()
+    {
+        {
+            using StreamReader words = new("WordsFile.txt");
+            int count = 0;
+            string[] dictionaryData = new string[178636];
+            while (!words.EndOfStream)
+            {
+
+                dictionaryData[count] = words.ReadLine();
+                count++;
+            }
+            words.Close();
+            return dictionaryData;
+        }
+    }
 
         }
         static string[] createDictionary()
