@@ -31,6 +31,9 @@ namespace SpellCheckerTask
             string userWord = Console.ReadLine();
             string[] dictionary = createDictionary();
             int incorrectNoWords = 0;
+            Console.WriteLine("enter a word");
+            string userWord = Console.ReadLine();          
+            int incorrectNoWords = 0;
             
 
             try
@@ -59,7 +62,7 @@ namespace SpellCheckerTask
             Console.WriteLine("enter sentence");
             string sentence = Console.ReadLine();
             string[] splitSentence = sentence.Split(' ');
-            string[] incorrectWords = new string[][];
+            var incorrectWords = new List<string>();
 
             foreach (string word in splitSentence)
             {
@@ -81,8 +84,7 @@ namespace SpellCheckerTask
 
             if (incorrectNoWords > 0)
             {
-                File.WriteAllLines("IncorrectWords.txt");
-                File.WriteAllText("IncorrectWords.txt", incorrectWords);
+                File.WriteAllLines("IncorrectWords.txt", incorrectWords);
                 Console.WriteLine($"Saved {incorrectNoWords} incorrect words to file.");
             }
             else
@@ -91,40 +93,22 @@ namespace SpellCheckerTask
             }
 
         }
-    }
-
-
-    static string[] createDictionary()
-    {
-        {
-            using StreamReader words = new("WordsFile.txt");
-            int count = 0;
-            string[] dictionaryData = new string[178636];
-            while (!words.EndOfStream)
-            {
-
-                dictionaryData[count] = words.ReadLine();
-                count++;
-            }
-            words.Close();
-            return dictionaryData;
-        }
-    }
-
-        }
         static string[] createDictionary()
         {
-            using StreamReader words = new("WordsFile.txt");
-            int count = 0;
-            string[] dictionaryData = new string[178636];
-            while (!words.EndOfStream)
             {
+                using StreamReader words = new("WordsFile.txt");
+                int count = 0;
+                string[] dictionaryData = new string[178636];
+                while (!words.EndOfStream)
+                {
 
-                dictionaryData[count] = words.ReadLine();
-                count++;
+                    dictionaryData[count] = words.ReadLine();
+                    count++;
+                }
+                words.Close();
+                return dictionaryData;
             }
-            words.Close();
-            return dictionaryData;
         }
+    }
     }
 }
